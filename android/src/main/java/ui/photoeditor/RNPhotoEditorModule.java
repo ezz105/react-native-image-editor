@@ -24,27 +24,31 @@ public class RNPhotoEditorModule extends ReactContextBaseJavaModule {
     private Callback mCancelCallback;
 
     private final ActivityEventListener mActivityEventListener = new BaseActivityEventListener() {
-        @Override
-        public void onActivityResult(
-            Activity activity,
-            int requestCode,
-            int resultCode,
-            Intent intent
-        ) {
-            if (requestCode == PHOTO_EDITOR_REQUEST) {
-                if (mDoneCallback != null) {
-                    if (resultCode == Activity.RESULT_CANCELED) {
-                        mCancelCallback.invoke(resultCode);
-                    } else {
-                        mDoneCallback.invoke(intent.getExtras().getString("imagePath"));
-                    }
+    @Override
+    public void onActivityResult(
+        Activity activity,
+        int requestCode,
+        int resultCode,
+        Intent intent
+    ) {
+        if (requestCode == PHOTO_EDITOR_REQUEST) {
+            if (resultCode == Activity.RESULT_CANCELED) {
+                if (mCancelCallback != null) {
+                    mCancelCallback.invoke(resultCode);
                 }
-
-                mCancelCallback = null;
-                mDoneCallback = null;
+            } else {
+                ArrayList<String> editedImagePaths = intent.getStringArrayListExtra("editedImagePaths");
+                if (mDoneCallback != null) {
+                    mDoneCallback.invoke(editedImagePaths);
+                }
             }
+
+            mCancelCallback = null;
+            mDoneCallback = null;
         }
-    };
+    }
+};
+
 
     public RNPhotoEditorModule(ReactApplicationContext reactContext) {
         super(reactContext);
