@@ -56,53 +56,60 @@ public class RNPhotoEditorModule extends ReactContextBaseJavaModule {
         return "RNPhotoEditor";
     }
 
-    @ReactMethod
-    public void Edit(final ReadableMap props, final Callback onDone, final Callback onCancel) {
-        String path = props.getString("path");
-        // print all readable map
-        TranslationService.getInstance().init(props.getMap("languages").toHashMap());
-
-        //Process Stickers
-        ReadableArray stickers = props.getArray("stickers");
-        ArrayList<Integer> stickersIntent = new ArrayList<Integer>();
-
-        for (int i = 0; i < stickers.size(); i++) {
-            int drawableId = getReactApplicationContext()
-                .getResources()
-                .getIdentifier(
-                    stickers.getString(i),
-                    "drawable",
-                    getReactApplicationContext().getPackageName()
-                );
-
-            stickersIntent.add(drawableId);
-        }
-
-        //Process Hidden Controls
-        ReadableArray hiddenControls = props.getArray("hiddenControls");
-        ArrayList hiddenControlsIntent = new ArrayList<>();
-
-        for (int i = 0; i < hiddenControls.size(); i++) {
-            hiddenControlsIntent.add(hiddenControls.getString(i));
-        }
-
-        //Process Colors
-        ReadableArray colors = props.getArray("colors");
-        ArrayList colorPickerColors = new ArrayList<>();
-
-        for (int i = 0; i < colors.size(); i++) {
-            colorPickerColors.add(Color.parseColor(colors.getString(i)));
-        }
-
-        Intent intent = new Intent(getCurrentActivity(), PhotoEditorActivity.class);
-        intent.putExtra("selectedImagePath", path);
-        intent.putExtra("colorPickerColors", colorPickerColors);
-        intent.putExtra("hiddenControls", hiddenControlsIntent);
-        intent.putExtra("stickers", stickersIntent);
-
-        mCancelCallback = onCancel;
-        mDoneCallback = onDone;
-
-        getCurrentActivity().startActivityForResult(intent, PHOTO_EDITOR_REQUEST);
+   @ReactMethod
+public void Edit(final ReadableMap props, final Callback onDone, final Callback onCancel) {
+    ReadableArray paths = props.getArray("paths"); // قائمة مسارات الصور
+    ArrayList<String> imagePaths = new ArrayList<>();
+    
+    for (int i = 0; i < paths.size(); i++) {
+        imagePaths.add(paths.getString(i));
     }
+
+    // تهيئة خدمة الترجمة
+    TranslationService.getInstance().init(props.getMap("languages").toHashMap());
+
+    // معالجة الملصقات
+    ReadableArray stickers = props.getArray("stickers");
+    ArrayList<Integer> stickersIntent = new ArrayList<>();
+
+    for (int i = 0; i < stickers.size(); i++) {
+        int drawableId = getReactApplicationContext()
+            .getResources()
+            .getIdentifier(
+                stickers.getString(i),
+                "drawable",
+                getReactApplicationContext().getPackageName()
+            );
+
+        stickersIntent.add(drawableId);
+    }
+
+    // معالجة عناصر التحكم المخفية
+    ReadableArray hiddenControls = props.getArray("hiddenControls");
+    ArrayList<String> hiddenControlsIntent = new ArrayList<>();
+
+    for (int i = 0; i < hiddenControls.size(); i++) {
+        hiddenControlsIntent.add(hiddenControls.getString(i));
+    }
+
+    // معالجة الألوان
+    ReadableArray colors = props.getArray("colors");
+    ArrayList<Integer> colorPickerColors = new ArrayList<>();
+
+    for (int i = 0; i < colors.size(); i++) {
+        colorPickerColors.add(Color.parseColor(colors.getString(i)));
+    }
+
+    Intent intent = new Intent(getCurrentActivity(), PhotoEditorActivity.class);
+    intent.putStringArrayListExtra("selectedImagePaths", imagePaths);
+    intent.putExtra("colorPickerColors", colorPickerColors);
+    intent.putExtra("hiddenControls", hiddenControlsIntent);
+    intent.putExtra("stickers", stickersIntent);
+
+    mCancelCallback = onCancel;
+    mDoneCallback = onDone;
+
+    getCurrentActivity().startActivityForResult(intent, PHOTO_EDITOR_REQUEST);
+}
+
 }
