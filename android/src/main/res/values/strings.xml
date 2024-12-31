@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">PhotoEditor</string>
+    <string name="title_activity_photo_editor">PhotoEditorActivity</string>
+    <string name="done">Done</string>
+    <string name="save">Save</string>
+    <string name="clear_all">Clear all</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="upload_dialog_title">Upload Image</string>
+    <string name="upload_picker_title">Select Picture</string>
+    <string name="directory_create_fail">Failed to create directory</string>
+    <string name="access_media_permissions_msg">To attach photos, we need to access media on your device</string>
+    <string name="continue_txt">Continue</string>
+    <string name="not_now">NOT NOW</string>
+    <string name="media_access_denied_msg">You denied storage access, no photos will be added.</string>
+    <string name="save_image_succeed">Image saved</string>
+
+    <string name="ic_close">"\ue902"</string>
+    <string name="ic_text">"\ue901"</string>
+    <string name="ic_draw">""\ue905</string>
+    <string name="ic_images">"\ue906"</string>
+    <string name="ic_save">"\ue903"</string>
+    <string name="ic_clear_all">"\ue909"</string>
+    <string name="ic_continue">"\ue900"</string>
+    <string name="ic_delete">"\ue907"</string>
+    <string name="ic_crop">\ue90a</string>
+    <string name="ic_rotate">"\ue908"</string>
+    <string name="choose_from_gallery">Choose From Gallery</string>
+    <string name="choose_from_camera">Choose From Camera</string>
+    <string name="undo"></string>
+    <string name="erase">Erase</string>
+
+</resources>

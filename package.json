@@ -1,0 +1,25 @@
+{
+  "name": "@thienmd/react-native-image-editor",
+  "version": "0.6.5",
+  "description": "React Native: Native Image Editor",
+  "main": "index.tsx",
+  "homepage": "https://github.com/ThienMD/react-native-image-editor.git",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ThienMD/react-native-image-editor.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "react-native"
+  ],
+  "author": "Thien",
+  "devDependencies": {
+    "@types/react": "^17.0.11",
+    "@types/react-native": "^0.64.10",
+    "typescript": "^4.3.4",
+    "prettier": "^2.3.1"
+  },
+  "license": "Apache License 2.0"
+}
