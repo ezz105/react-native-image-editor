@@ -98,11 +98,19 @@ public class PhotoEditorActivity
     private boolean hideBottomControls = false;
 
     private ImageView photoEditImageView;
+    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_editor);
+
+         RecyclerView recyclerView = findViewById(R.id.recyclerView);
+         recyclerView.setLayoutManager(new GridLayoutManager(this, 3)); // 3 columns for grid view
+
+        // Assume imagePaths is a List<String> containing the paths of images to display
+        ImageAdapter adapter = new ImageAdapter(imagePaths);
+        recyclerView.setAdapter(adapter);
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 

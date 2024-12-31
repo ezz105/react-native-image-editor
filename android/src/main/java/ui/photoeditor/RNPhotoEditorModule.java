@@ -25,26 +25,40 @@ public class RNPhotoEditorModule extends ReactContextBaseJavaModule {
 
     private final ActivityEventListener mActivityEventListener = new BaseActivityEventListener() {
         @Override
-        public void onActivityResult(
-            Activity activity,
-            int requestCode,
-            int resultCode,
-            Intent intent
-        ) {
-            if (requestCode == PHOTO_EDITOR_REQUEST) {
-                if (mDoneCallback != null) {
-                    if (resultCode == Activity.RESULT_CANCELED) {
-                        mCancelCallback.invoke(resultCode);
+    public void onActivityResult(
+        Activity activity,
+        int requestCode,
+        int resultCode,
+        Intent intent
+    ) {
+        if (requestCode == PHOTO_EDITOR_REQUEST) {
+            if (mDoneCallback != null) {
+                if (resultCode == Activity.RESULT_CANCELED) {
+                    mCancelCallback.invoke(resultCode);
+                } else {
+                    // Retrieve the list of image paths from the intent
+                    ArrayList<String> imagePaths = intent.getExtras().getStringArrayList("imagePaths");
+
+                    if (imagePaths != null) {
+                        // Process each image path
+                        for (String imagePath : imagePaths) {
+                            // Perform any processing needed on each image
+                            // For example, you could add the processed path to a new list
+                        }
+
+                        // Invoke the callback with the list of processed image paths
+                        mDoneCallback.invoke(imagePaths);
                     } else {
-                        mDoneCallback.invoke(intent.getExtras().getString("imagePath"));
+                        // Handle the case where no images were returned
+                        mDoneCallback.invoke(new ArrayList<String>());
                     }
                 }
-
-                mCancelCallback = null;
-                mDoneCallback = null;
             }
+
+            mCancelCallback = null;
+            mDoneCallback = null;
         }
-    };
+    }
 
     public RNPhotoEditorModule(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -58,7 +72,17 @@ public class RNPhotoEditorModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void Edit(final ReadableMap props, final Callback onDone, final Callback onCancel) {
-        String path = props.getString("path");
+        // Retrieve the list of image paths from props
+    ReadableArray pathsArray = props.getArray("paths");
+    ArrayList<String> imagePaths = new ArrayList<>();
+
+    for (int i = 0; i < pathsArray.size(); i++) {
+        imagePaths.add(pathsArray.getString(i));
+    }
+
+    // The rest of the method remains unchanged
+
+
         // print all readable map
         TranslationService.getInstance().init(props.getMap("languages").toHashMap());
 
@@ -95,7 +119,7 @@ public class RNPhotoEditorModule extends ReactContextBaseJavaModule {
         }
 
         Intent intent = new Intent(getCurrentActivity(), PhotoEditorActivity.class);
-        intent.putExtra("selectedImagePath", path);
+        intent.putStringArrayListExtra("imagePaths", imagePaths);
         intent.putExtra("colorPickerColors", colorPickerColors);
         intent.putExtra("hiddenControls", hiddenControlsIntent);
         intent.putExtra("stickers", stickersIntent);

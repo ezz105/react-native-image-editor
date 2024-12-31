@@ -20,12 +20,12 @@ type Language = {
 }
 
 export interface PhotoEditorProps {
-    path: string
+    paths: string[],  // Ensure this is defined as an array of strings
     colors?: string[]
     stickers?: string[]
     hiddenControls?: ('text' | 'clear' | 'draw' | 'save' | 'share' | 'sticker' | 'crop')[]
     languages: Language
-    onDone?: (imagePath: string) => void
+    onDone?: (imagePaths: string[]) => void,  // Update to accept an array
     onCancel?: (resultCode: number) => void
 }
 
@@ -93,8 +93,8 @@ export default class PhotoEditor {
 
         RNPhotoEditor.Edit(
             { colors, hiddenControls, stickers, languages, ...props },
-            (imagePath: string) => {
-                onDone && onDone(imagePath)
+            (imagePaths: string[]) => {  // Update to handle an array
+                onDone && onDone(imagePaths);
             },
             (resultCode: number) => {
                 onCancel && onCancel(resultCode)

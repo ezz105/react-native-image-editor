@@ -2,6 +2,7 @@ package com.ahmedadeltito.photoeditor;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,7 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+
+import java.util.ArrayList;
 import java.util.List;
+
 import ui.photoeditor.R;
 
 /**
@@ -35,7 +40,9 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.imageView.setImageBitmap(imageBitmaps.get(position));
+        Glide.with(holder.imageView.getContext())
+            .load(imageBitmaps.get(position))
+            .into(holder.imageView);
     }
 
     @Override
@@ -65,5 +72,17 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
 
     public interface OnImageClickListener {
         void onImageClickListener(Bitmap image);
+    }
+
+    // Example usage
+    public static void setupRecyclerView(RecyclerView recyclerView, Context context, List<String> imagePaths) {
+        List<Bitmap> imageBitmaps = new ArrayList<>();
+        BitmapFactory.Options options = new BitmapFactory.Options(); // Add necessary options if needed
+        for (String path : imagePaths) {
+            Bitmap bitmap = BitmapFactory.decodeFile(path, options);
+            imageBitmaps.add(bitmap);
+        }
+        ImageAdapter adapter = new ImageAdapter(context, imageBitmaps);
+        recyclerView.setAdapter(adapter);
     }
 }
